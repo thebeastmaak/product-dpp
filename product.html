@@ -17,7 +17,7 @@
   <script>
     async function loadProduct() {
       const id = window.location.pathname.split("/").pop();
-      const apiUrl = `https://backend-dpp.onrender.com/product/${id}`; // Update if needed
+      const apiUrl = `https://backend-dpp.onrender.com/product/${id}`; // Update if your backend URL changes
 
       try {
         const res = await fetch(apiUrl);
