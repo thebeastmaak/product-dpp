@@ -18,10 +18,11 @@ async function fetchProduct() {
       <div class="card">
         <h2>${data.name || "Unnamed Product"}</h2>
         <ul>
-          <li><strong>🆔 Product ID:</strong> ${data.product_id || "Not provided"}</li>
-          <li><strong>🏭 Manufacturer:</strong> ${data.manufacturer || "Not provided"}</li>
-          <li><strong>📝 Description:</strong> ${data.description || "Not provided"}</li>
-          <li><strong>🧪 Materials:</strong> ${(Array.isArray(data.materials) ? data.materials.join(", ") : data.materials) || "Not provided"}</li>
+          <li><strong> Product ID:</strong> ${data.product_id || "Not provided"}</li>
+          <li><strong> Country:</strong> ${data.country || "Not provided"}</li>
+          <li><strong> Sport:</strong> ${(Array.isArray(data.sport) ? data.sport.join(", ") : data.sport) || "Not provided"}</li>
+          <li><strong> Description:</strong> ${data.description || "Not provided"}</li>
+          
         </ul>
       </div>
     `;
