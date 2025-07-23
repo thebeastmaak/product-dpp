@@ -48,16 +48,14 @@
         const data = await res.json();
         container.classList.remove("loading");
         container.innerHTML = `
-          <h2>${data.name}</h2>
-          <ul>
-            <li><strong>🆔 Product ID:</strong> ${data.product_id}</li>
-            <li><strong>🏭 Manufacturer:</strong> ${data.manufacturer}</li>
-            <li><strong>📝 Description:</strong> ${data.description}</li>
-            ${data.materials ? `<li><strong>🧪 Materials:</strong> ${data.materials}</li>` : ""}
-            ${data.origin ? `<li><strong>🌍 Country of Origin:</strong> ${data.origin}</li>` : ""}
-            ${data.sustainability ? `<li><strong>🌱 Sustainability Info:</strong> ${data.sustainability}</li>` : ""}
-          </ul>
-        `;
+  <h2>${data.name || "Unnamed Product"}</h2>
+  <ul>
+    <li><strong>🆔 Product ID:</strong> ${data.product_id || "Not provided"}</li>
+    <li><strong>🏭 Manufacturer:</strong> ${data.manufacturer || "Not provided"}</li>
+    <li><strong>📝 Description:</strong> ${data.description || "Not provided"}</li>
+    <li><strong>🧪 Materials:</strong> ${data.materials || "Not provided"}</li>
+  </ul>
+`;
       } catch (err) {
         container.classList.remove("loading");
         container.innerHTML = `<p class="error">❌ Product not found.</p>`;
