@@ -3,31 +3,143 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Product DPP</title>
+  <title>Digital Athlete Passport</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      background-color: #eaeaea;
+      margin: 0;
       padding: 2rem;
-      background: #f4f4f4;
+      font-family: Arial, sans-serif;
     }
-    .card {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      max-width: 500px;
+
+    #product-container {
+      max-width: 400px;
       margin: 0 auto;
     }
-    h2 {
-      margin-top: 0;
+
+    .athlete-passport {
+      border: 2px solid #1c3b70;
+      background-color: #1c3b70;
+      color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
-    li {
-      margin: 0.5rem 0;
+
+    .athlete-passport .header {
+      text-align: center;
+      background-color: #1c3b70;
+      color: #ffffff;
+      padding: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .passport-body {
+      background: linear-gradient(to bottom right, #15315b, #502c83);
+      padding: 1rem;
+    }
+
+    .athlete-photo img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .athlete-info {
+      background-color: rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .athlete-info h2 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .athlete-info ul {
+      list-style: none;
+      padding: 0;
+      font-size: 0.9rem;
+    }
+
+    .athlete-info li {
+      margin: 0.3rem 0;
+    }
+
+    .footer {
+      background-color: #0e2044;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .footer-name {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .footer-details {
+      font-size: 0.8rem;
+      color: #a9c8f9;
     }
   </style>
 </head>
 <body>
-  <div id="product-container">Loading product details...</div>
-  <script src="script.js"></script>
+
+  <div id="product-container">Loading...</div>
+
+  <script>
+    const container = document.getElementById("product-container");
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function fetchProduct() {
+      container.innerHTML = "Loading product details...";
+
+      try {
+        const res = await fetch(`https://backend-dpp.onrender.com/product/${id}`);
+        const data = await res.json();
+
+        if (res.status !== 200) {
+          container.innerHTML = `<p>❌ ${data.error}</p>`;
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="athlete-passport">
+            <div class="header">DIGITAL ATHLETE PASSPORT</div>
+            <div class="passport-body">
+              <div class="athlete-photo">
+                <img src="${data.image || 'https://via.placeholder.com/300x400?text=Athlete'}" alt="${data.name}" />
+              </div>
+              <div class="athlete-info">
+                <h2>${data.name || "Unnamed Athlete"}</h2>
+                <ul>
+                  <li><strong>Product ID:</strong> ${data.product_id || "N/A"}</li>
+                  <li><strong>Country:</strong> ${data.country || "N/A"}</li>
+                  <li><strong>Sport:</strong> ${(Array.isArray(data.sport) ? data.sport.join(", ") : data.sport) || "N/A"}</li>
+                  <li><strong>Description:</strong> ${data.description || "N/A"}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-name">${data.name || "Unnamed Athlete"}</div>
+              <div class="footer-details">ATHLETE / TEAM ${data.country || "N/A"}<br>${data.university || "University Not Provided"}</div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p>❌ Failed to load product. Try again later.</p>`;
+      }
+    }
+
+    fetchProduct();
+  </script>
+
 </body>
 </html>
