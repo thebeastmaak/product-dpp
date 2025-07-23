@@ -1,79 +1,72 @@
-/* style.css */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(to right, #f0f4f8, #d9e2ec);
-  color: #333;
-}
-
-.page-wrapper {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-header h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #004080;
-}
-
-.subtitle {
-  font-size: 1rem;
-  color: #666;
-}
-
-.card {
-  background-color: #fff;
+.athlete-passport {
+  max-width: 400px;
+  margin: 2rem auto;
+  border: 2px solid #1c3b70;
+  background-color: #1c3b70;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 2rem;
-  transition: all 0.3s ease;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-.card h2 {
-  font-size: 1.5rem;
-  color: #0070c0;
+.athlete-passport .header {
+  text-align: center;
+  background-color: #1c3b70;
+  color: #ffffff;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.passport-body {
+  background: linear-gradient(to bottom right, #15315b, #502c83);
+  padding: 1rem;
+}
+
+.athlete-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
   margin-bottom: 1rem;
 }
 
-.card ul {
-  list-style-type: none;
+.athlete-info {
+  background-color: rgba(255,255,255,0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.athlete-info h2 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.athlete-info ul {
+  list-style: none;
   padding: 0;
-  margin: 0;
-}
-
-.card li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
-  font-size: 1rem;
-}
-
-.card li:last-child {
-  border-bottom: none;
-}
-
-.card.loading {
-  text-align: center;
-  font-style: italic;
-  color: #666;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-  text-align: center;
-}
-
-footer {
-  text-align: center;
-  margin-top: 2rem;
   font-size: 0.9rem;
-  color: #666;
+}
+
+.athlete-info li {
+  margin: 0.3rem 0;
+}
+
+.footer {
+  background-color: #0e2044;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.footer-details {
+  font-size: 0.8rem;
+  color: #a9c8f9;
 }
