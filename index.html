@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Product Passport</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Digital Product Passport</h1>
+    <div id="product-container">
+      <p>Loading product details...</p>
+    </div>
+  </div>
+
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    async function loadProduct() {
+      const id = getQueryParam("id");
+      if (!id) {
+        document.getElementById("product-container").innerHTML = `<p>❗ No product ID provided.</p>`;
+        return;
+      }
+
+      const apiUrl = `https://backend-dpp.onrender.com/product/${id}`;
+      try {
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error("Product not found");
+
+        const data = await res.json();
+        document.getElementById("product-container").innerHTML = `
+          <h2>${data.name}</h2>
+          <p><strong>ID:</strong> ${data.product_id}</p>
+          <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+          <p><strong>Description:</strong> ${data.description}</p>
+        `;
+      } catch (err) {
+        document.getElementById("product-container").innerHTML = `<p style="color:red;">❌ Product not found.</p>`;
+      }
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>
