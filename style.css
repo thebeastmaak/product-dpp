@@ -176,3 +176,9 @@
 #mic-button:hover {
   background-color: #3e2369;
 }
+#chatbot-container {
+  display: none;
+}
+#chatbot-container.show {
+  display: block;
+}
