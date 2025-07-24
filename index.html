@@ -173,22 +173,15 @@
 
   <div id="product-container">Loading...</div>
 
-  <!-- Chatbot Trigger Button -->
-<button id="chatbot-button" style="margin-top: 1rem; background-color: #3f51b5; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer;">
-  🤖 Chat with AI
-</button>
-
-<!-- Chatbot Popup Overlay -->
-<div id="chatbot-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background-color: rgba(0,0,0,0.6);">
-  <div style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); background: white; padding: 1rem; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
-    <button id="close-chatbot" style="float: right; border: none; background: transparent; font-size: 1.2rem; cursor: pointer;">&times;</button>
-    <h3>Ask the AI Assistant</h3>
-    <textarea id="chatbot-input" rows="3" style="width: 100%; padding: 0.5rem;"></textarea>
-    <button id="speak-btn" style="margin-top: 0.5rem;">🎤 Speak</button>
-    <button id="send-btn" style="margin-top: 0.5rem;">Send</button>
-    <div id="chatbot-response" style="margin-top: 1rem;"></div>
+  <div id="chatbot-popup">
+    <div id="chat-header">Ask AI Assistant</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Type your question..." />
+      <button id="mic-btn">🎤</button>
+      <button id="send-btn">Send</button>
+    </div>
   </div>
-</div>
 
   <script>
     const container = document.getElementById("product-container");
