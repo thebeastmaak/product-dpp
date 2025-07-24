@@ -53,20 +53,6 @@
   margin: 0.3rem 0;
 }
 
-position: absolute;
-bottom: 0;
-left: 50%;
-transform: translate(-50%, 100%);
-width: 100%;
-max-width: 400px;
-background: #ffffff;
-border-top-left-radius: 12px;
-border-top-right-radius: 12px;
-box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
-display: none;
-flex-direction: column;
-z-index: 999;
-
 .footer {
   background-color: #0e2044;
   text-align: center;
@@ -83,4 +69,31 @@ z-index: 999;
 .footer-details {
   font-size: 0.8rem;
   color: #a9c8f9;
+}
+
+/* ✅ Chatbot popup styling */
+#chatbot-popup {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#chatbot-popup.show {
+  transform: translate(-50%, 0%);
+  opacity: 1;
+  pointer-events: auto;
+  display: flex;
 }
