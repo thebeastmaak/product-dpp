@@ -15,6 +15,7 @@
     #product-container {
       max-width: 400px;
       margin: 0 auto;
+      position: relative;
     }
 
     .athlete-passport {
@@ -87,28 +88,22 @@
       color: #a9c8f9;
     }
 
-    /* Chat Button */
-    #chat-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+    #chat-toggle-btn {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 20px;
       background-color: #1c3b70;
       color: white;
       border: none;
-      border-radius: 50px;
-      padding: 12px 20px;
-      font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
-      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    /* Chatbot Container (Initially Hidden) */
     #chatbot-container {
-      display: none;
       position: fixed;
-      bottom: 80px;
+      bottom: 90px;
       right: 20px;
       width: 300px;
       background: white;
@@ -116,7 +111,8 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       overflow: hidden;
       font-family: Arial, sans-serif;
-      z-index: 1000;
+      z-index: 9999;
+      display: none;
     }
 
     #chat-header {
@@ -171,22 +167,34 @@
     #chat-input-area button:hover {
       background: #163057;
     }
+
+    #mic-button {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #mic-button:hover {
+      background: #d32f2f;
+    }
   </style>
 </head>
 <body>
 
   <div id="product-container">Loading...</div>
 
-  <!-- Chat Toggle Button -->
-  <button id="chat-toggle">💬 Chat</button>
+  <button id="chat-toggle-btn" onclick="toggleChat()">💬 Chat with me</button>
 
-  <!-- Chatbot Popup -->
+  <!-- Chatbot -->
   <div id="chatbot-container">
     <div id="chat-header">🤖 Ask me anything!</div>
     <div id="chat-messages"></div>
     <div id="chat-input-area">
       <input type="text" id="chat-input" placeholder="Type your question..." />
       <button onclick="sendMessage()">Send</button>
+      <button id="mic-button" title="Speak your question">🎤</button>
     </div>
   </div>
 
@@ -237,16 +245,15 @@
 
     fetchProduct();
 
-    // Toggle chat visibility
-    document.getElementById("chat-toggle").addEventListener("click", () => {
-      const chatbot = document.getElementById("chatbot-container");
-      chatbot.style.display = chatbot.style.display === "block" ? "none" : "block";
-    });
+    // Toggle chat window
+    function toggleChat() {
+      const chat = document.getElementById("chatbot-container");
+      chat.style.display = chat.style.display === "none" ? "block" : "none";
+    }
 
-    // Send chat message
-    async function sendMessage() {
+    async function sendMessage(text) {
       const input = document.getElementById("chat-input");
-      const message = input.value.trim();
+      const message = text || input.value.trim();
       if (!message) return;
 
       const chatMessages = document.getElementById("chat-messages");
@@ -261,21 +268,58 @@
           body: JSON.stringify({ question: message })
         });
         const data = await res.json();
-        chatMessages.innerHTML += `<div class="message bot">🤖 ${data.answer || "No answer available."}</div>`;
+        const reply = data.answer || "No answer available.";
+        chatMessages.innerHTML += `<div class="message bot">🤖 ${reply}</div>`;
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        speak(reply);
       } catch (err) {
         console.error(err);
         chatMessages.innerHTML += `<div class="message bot">❌ Error talking to chatbot.</div>`;
       }
     }
 
-    // Press Enter to send
+    // Voice Output
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Voice Input
+    const micButton = document.getElementById("mic-button");
+    let recognition;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      recognition.onresult = event => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("chat-input").value = transcript;
+        sendMessage(transcript);
+      };
+
+      recognition.onerror = event => {
+        alert("Speech recognition error: " + event.error);
+      };
+    } else {
+      micButton.disabled = true;
+      micButton.title = "Voice input not supported";
+    }
+
+    micButton.addEventListener("click", () => {
+      if (recognition) recognition.start();
+    });
+
+    // Send on Enter
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("chat-input").addEventListener("keydown", e => {
         if (e.key === "Enter") sendMessage();
       });
     });
   </script>
-
 </body>
 </html>
