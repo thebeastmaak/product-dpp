@@ -57,9 +57,11 @@ async function fetchProduct() {
 }
 
 function toggleChat() {
-  const popup = document.getElementById("chatbot-popup");
-  if (popup) popup.classList.toggle("show");
-}
+  const popup = document.querySelector("#chatbot-popup");
+  if (popup) {
+    popup.classList.toggle("visible");
+  }
+
 
 function attachChatEvents() {
   const sendBtn = document.getElementById("send-btn");
