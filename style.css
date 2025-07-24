@@ -6,7 +6,7 @@
   color: #ffffff;
   font-family: Arial, sans-serif;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -101,14 +101,78 @@
   display: none;
 }
 
-/* Show popup when .show is applied */
 .popup-content.show {
   display: block;
 }
 
-/* Prevent overflow */
-.athlete-passport,
-.passport-body,
-.athlete-info {
-  overflow: visible;
+/* --- Chatbot Styles (positioned on top of athlete-passport) --- */
+#chatbot-container {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: none;
+  z-index: 100;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+#chat-header {
+  background-color: #1c3b70;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+#chat-messages {
+  padding: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  background: #f4f4f4;
+}
+
+#chat-input-area {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: #eaeaea;
+  gap: 0.5rem;
+}
+
+#chat-input-area input[type="text"] {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+#chat-input-area button {
+  background-color: #1c3b70;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#chat-input-area button:hover {
+  background-color: #16305e;
+}
+
+#mic-button {
+  background-color: #502c83;
+}
+
+#mic-button:hover {
+  background-color: #3e2369;
 }
