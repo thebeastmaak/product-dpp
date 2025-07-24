@@ -105,7 +105,6 @@
       background-color: #dce6ff;
     }
 
-    /* Chatbot Popup inside athlete card */
     #chatbot-popup {
       position: absolute;
       bottom: 0;
@@ -170,7 +169,6 @@
   </style>
 </head>
 <body>
-
   <div id="product-container">Loading...</div>
 
   <script>
@@ -178,11 +176,14 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
+    let productData = null;
+
     async function fetchProduct() {
       container.innerHTML = "Loading product details...";
       try {
         const res = await fetch(`https://backend-dpp.onrender.com/product/${id}`);
         const data = await res.json();
+        productData = data;
 
         if (res.status !== 200) {
           container.innerHTML = `<p>❌ ${data.error}</p>`;
@@ -222,37 +223,51 @@
             </div>
           </div>
         `;
-        attachChatEvents(); // attach listeners after DOM added
+        attachChatEvents();
       } catch (err) {
         console.error(err);
         container.innerHTML = `<p>❌ Failed to load product. Try again later.</p>`;
       }
     }
 
-    fetchProduct();
-
     function toggleChat() {
-      const popup = document.querySelector("#chatbot-popup");
+      const popup = document.getElementById("chatbot-popup");
       if (popup) {
         popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
       }
     }
 
     function attachChatEvents() {
-      document.getElementById("send-btn").onclick = () => {
+      document.getElementById("send-btn").onclick = async () => {
         const input = document.getElementById("chat-input");
         const msg = input.value.trim();
         if (!msg) return;
+
         appendMessage("You", msg, "user");
         input.value = "";
-        setTimeout(() => {
-          appendMessage("AI", "I'm still learning to answer that!", "bot");
-        }, 1000);
+
+        try {
+          const res = await fetch("https://backend-dpp.onrender.com/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              question: msg,
+              productId: productData?.product_id || id
+            }),
+          });
+
+          const data = await res.json();
+          const answer = data.answer || "I'm still learning to answer that.";
+          appendMessage("AI", answer, "bot");
+        } catch (error) {
+          console.error("Error fetching answer:", error);
+          appendMessage("AI", "Sorry, I couldn't fetch an answer right now.", "bot");
+        }
       };
 
       document.getElementById("mic-btn").onclick = () => {
         if (recognition) recognition.start();
-        else alert("Voice not supported in this browser.");
+        else alert("Voice input not supported in this browser.");
       };
     }
 
@@ -282,6 +297,8 @@
         console.error("Voice error", event);
       };
     }
+
+    fetchProduct();
   </script>
 </body>
 </html>
