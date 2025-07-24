@@ -45,4 +45,34 @@ async function fetchProduct() {
   }
 }
 
+// Chatbot functionality
+document.body.addEventListener('click', function (e) {
+  if (e.target.id === 'chatbot-button') {
+    document.getElementById('chatbot-overlay').style.display = 'block';
+  }
+  if (e.target.id === 'close-chatbot') {
+    document.getElementById('chatbot-overlay').style.display = 'none';
+  }
+});
+
+document.getElementById("send-btn").addEventListener("click", () => {
+  const input = document.getElementById("chatbot-input").value;
+  if (input.trim()) {
+    document.getElementById("chatbot-response").innerText = `You asked: "${input}". (Response logic not connected yet.)`;
+  }
+});
+
+// Voice input (Web Speech API)
+document.getElementById("speak-btn").addEventListener("click", () => {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "en-US";
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("chatbot-input").value = transcript;
+  };
+});
+
+
 fetchProduct();
