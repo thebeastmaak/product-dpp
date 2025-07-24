@@ -105,7 +105,7 @@
       background-color: #dce6ff;
     }
 
-    /* Chatbot Popup */
+    /* Chatbot Popup inside athlete card */
     #chatbot-popup {
       position: absolute;
       bottom: 0;
@@ -173,16 +173,6 @@
 
   <div id="product-container">Loading...</div>
 
-  <div id="chatbot-popup">
-    <div id="chat-header">Ask AI Assistant</div>
-    <div id="chat-messages"></div>
-    <div id="chat-input-area">
-      <input type="text" id="chat-input" placeholder="Type your question..." />
-      <button id="mic-btn">🎤</button>
-      <button id="send-btn">Send</button>
-    </div>
-  </div>
-
   <script>
     const container = document.getElementById("product-container");
     const params = new URLSearchParams(window.location.search);
@@ -221,8 +211,18 @@
               <div class="footer-details">ATHLETE / TEAM ${data.country || "N/A"}<br>${data.university || "University Not Provided"}</div>
               <button class="chat-button" onclick="toggleChat()">Ask AI</button>
             </div>
+            <div id="chatbot-popup">
+              <div id="chat-header">Ask AI Assistant</div>
+              <div id="chat-messages"></div>
+              <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type your question..." />
+                <button id="mic-btn">🎤</button>
+                <button id="send-btn">Send</button>
+              </div>
+            </div>
           </div>
         `;
+        attachChatEvents(); // attach listeners after DOM added
       } catch (err) {
         console.error(err);
         container.innerHTML = `<p>❌ Failed to load product. Try again later.</p>`;
@@ -232,21 +232,29 @@
     fetchProduct();
 
     function toggleChat() {
-      const popup = document.getElementById("chatbot-popup");
-      popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+      const popup = document.querySelector("#chatbot-popup");
+      if (popup) {
+        popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+      }
     }
 
-    document.getElementById("send-btn").onclick = () => {
-      const input = document.getElementById("chat-input");
-      const msg = input.value.trim();
-      if (!msg) return;
-      appendMessage("You", msg, "user");
-      input.value = "";
-      // Fake bot reply
-      setTimeout(() => {
-        appendMessage("AI", "I'm still learning to answer that!", "bot");
-      }, 1000);
-    };
+    function attachChatEvents() {
+      document.getElementById("send-btn").onclick = () => {
+        const input = document.getElementById("chat-input");
+        const msg = input.value.trim();
+        if (!msg) return;
+        appendMessage("You", msg, "user");
+        input.value = "";
+        setTimeout(() => {
+          appendMessage("AI", "I'm still learning to answer that!", "bot");
+        }, 1000);
+      };
+
+      document.getElementById("mic-btn").onclick = () => {
+        if (recognition) recognition.start();
+        else alert("Voice not supported in this browser.");
+      };
+    }
 
     function appendMessage(sender, text, type) {
       const chat = document.getElementById("chat-messages");
@@ -274,11 +282,6 @@
         console.error("Voice error", event);
       };
     }
-
-    document.getElementById("mic-btn").onclick = () => {
-      if (recognition) recognition.start();
-      else alert("Voice not supported in this browser.");
-    };
   </script>
 </body>
 </html>
