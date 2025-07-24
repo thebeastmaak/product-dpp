@@ -15,6 +15,7 @@
     #product-container {
       max-width: 400px;
       margin: 0 auto;
+      position: relative;
     }
 
     .athlete-passport {
@@ -24,6 +25,7 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      position: relative;
     }
 
     .athlete-passport .header {
@@ -74,6 +76,7 @@
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
+      position: relative;
     }
 
     .footer-name {
@@ -85,12 +88,100 @@
     .footer-details {
       font-size: 0.8rem;
       color: #a9c8f9;
+      margin-bottom: 0.5rem;
     }
+
+    .chat-button {
+      background-color: #ffffff;
+      color: #1c3b70;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chat-button:hover {
+      background-color: #dce6ff;
+    }
+
+    /* Chatbot Popup */
+    #chatbot-popup {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 100%);
+      width: 100%;
+      max-width: 400px;
+      background: #ffffff;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    #chat-header {
+      background: #1c3b70;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #chat-messages {
+      padding: 10px;
+      height: 180px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+
+    #chat-input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+
+    #send-btn, #mic-btn {
+      background: #1c3b70;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #send-btn:hover, #mic-btn:hover {
+      background: #163057;
+    }
+
+    .message {
+      margin: 5px 0;
+    }
+
+    .user { font-weight: bold; color: #1c3b70; }
+    .bot { color: #444; }
   </style>
 </head>
 <body>
 
   <div id="product-container">Loading...</div>
+
+  <div id="chatbot-popup">
+    <div id="chat-header">Ask AI Assistant</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Type your question..." />
+      <button id="mic-btn">🎤</button>
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
 
   <script>
     const container = document.getElementById("product-container");
@@ -99,7 +190,6 @@
 
     async function fetchProduct() {
       container.innerHTML = "Loading product details...";
-
       try {
         const res = await fetch(`https://backend-dpp.onrender.com/product/${id}`);
         const data = await res.json();
@@ -129,6 +219,7 @@
             <div class="footer">
               <div class="footer-name">${data.name || "Unnamed Athlete"}</div>
               <div class="footer-details">ATHLETE / TEAM ${data.country || "N/A"}<br>${data.university || "University Not Provided"}</div>
+              <button class="chat-button" onclick="toggleChat()">Ask AI</button>
             </div>
           </div>
         `;
@@ -139,7 +230,55 @@
     }
 
     fetchProduct();
-  </script>
 
+    function toggleChat() {
+      const popup = document.getElementById("chatbot-popup");
+      popup.style.display = (popup.style.display === "flex") ? "none" : "flex";
+    }
+
+    document.getElementById("send-btn").onclick = () => {
+      const input = document.getElementById("chat-input");
+      const msg = input.value.trim();
+      if (!msg) return;
+      appendMessage("You", msg, "user");
+      input.value = "";
+      // Fake bot reply
+      setTimeout(() => {
+        appendMessage("AI", "I'm still learning to answer that!", "bot");
+      }, 1000);
+    };
+
+    function appendMessage(sender, text, type) {
+      const chat = document.getElementById("chat-messages");
+      const msg = document.createElement("div");
+      msg.className = `message ${type}`;
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Voice recognition
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("chat-input").value = transcript;
+      };
+
+      recognition.onerror = function(event) {
+        console.error("Voice error", event);
+      };
+    }
+
+    document.getElementById("mic-btn").onclick = () => {
+      if (recognition) recognition.start();
+      else alert("Voice not supported in this browser.");
+    };
+  </script>
 </body>
 </html>
