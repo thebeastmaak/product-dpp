@@ -58,16 +58,14 @@ async function fetchProduct() {
 
 function toggleChat() {
   const popup = document.querySelector("#chatbot-popup");
-  if (popup) {
-    popup.classList.toggle("visible");
-  }
-
+  if (popup) popup.classList.toggle("visible");
+}
 
 function attachChatEvents() {
   const sendBtn = document.getElementById("send-btn");
   const micBtn = document.getElementById("mic-btn");
 
-  if (sendBtn) sendBtn.onclick = () => {
+  if (sendBtn) sendBtn.onclick = async () => {
     const input = document.getElementById("chat-input");
     const message = input.value.trim();
     if (!message) return;
@@ -76,15 +74,25 @@ function attachChatEvents() {
     messages.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
     input.value = "";
 
-    // Simulated AI response — replace with backend fetch if needed
-    setTimeout(() => {
-      messages.innerHTML += `<div><strong>AI:</strong> This is a placeholder response for "${message}".</div>`;
-      messages.scrollTop = messages.scrollHeight;
-    }, 600);
+    try {
+      const res = await fetch("https://dpp-chatbot-backend.onrender.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+      const reply = data.reply || "🤖 No response from AI.";
+      messages.innerHTML += `<div><strong>AI:</strong> ${reply}</div>`;
+    } catch (err) {
+      messages.innerHTML += `<div><strong>AI:</strong> ❌ Error reaching AI service.</div>`;
+    }
+
+    messages.scrollTop = messages.scrollHeight;
   };
 
   if (micBtn) micBtn.onclick = () => {
-    alert("Voice input not yet implemented.");
+    alert("🎤 Voice input not yet implemented.");
   };
 }
 
