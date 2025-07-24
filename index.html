@@ -325,5 +325,24 @@
       });
     });
   </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const popupBtn = document.querySelector(".popup-button");
+    const popupContent = document.querySelector(".popup-content");
+
+    popupBtn.addEventListener("click", () => {
+      popupContent.classList.toggle("show");
+    });
+
+    // Optional: Hide when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!popupContent.contains(e.target) && !popupBtn.contains(e.target)) {
+        popupContent.classList.remove("show");
+      }
+    });
+  });
+</script>
+  
 </body>
 </html>
