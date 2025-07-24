@@ -231,14 +231,15 @@
               </div>
             </div>
             <div class="footer">
-              <div class="footer-name">${data.name || "Unnamed Athlete"}</div>
-              <div class="footer-details">
-                ATHLETE / TEAM ${data.country || "N/A"}<br>
-                ${data.university || "University Not Provided"}
-              </div>
-              <button id="chat-toggle-btn" onclick="toggleChat()">💬 Chat with me</button>
-            </div>
-          </div>
+  <div class="footer-name">${data.name || "Unnamed Athlete"}</div>
+  <div class="footer-details">
+    ATHLETE / TEAM ${data.country || "N/A"}<br>
+    ${data.university || "University Not Provided"}
+  </div>
+  <div style="margin-top: 1rem;">
+    <button id="chat-toggle-btn" onclick="toggleChat()">💬 Chat with me</button>
+  </div>
+</div>
         `;
       } catch (err) {
         console.error(err);
