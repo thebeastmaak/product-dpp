@@ -86,6 +86,7 @@
   cursor: pointer;
 }
 
+/* Initially hidden */
 .popup-content {
   position: absolute;
   top: 110%; /* below the button */
@@ -100,8 +101,8 @@
   display: none;
 }
 
-.popup-wrapper:hover .popup-content,
-.popup-wrapper:focus-within .popup-content {
+/* Show popup when .show is applied */
+.popup-content.show {
   display: block;
 }
 
