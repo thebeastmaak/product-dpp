@@ -92,7 +92,7 @@
       append("You", msg, "user");
       document.getElementById("chat-input").value = "";
       try {
-        const res = await fetch("https://backend-dpp.onrender.com/ask", {
+        const res = await fetch("https://dpp-chatbot-backend.onrender.com/chat", {
           method:"POST",
           headers:{"Content-Type":"application/json"},
           body: JSON.stringify({ question: msg, productId: productData.product_id })
