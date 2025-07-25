@@ -86,22 +86,23 @@
   }
 
   function attachChatEvents() {
-    document.getElementById("send-btn").onclick = async () => {
-      const msg = document.getElementById("chat-input").value.trim();
-      if (!msg) return;
-      append("You", msg, "user");
-      document.getElementById("chat-input").value = "";
-      try {
-        const res = await fetch("https://dpp-chatbot-backend.onrender.com/chat", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message })  // ✅ not "question"
-});
-        });
-        const { answer } = await res.json();
-        append("AI", answer || "No response.", "bot");
-      } catch { append("AI", "Error getting answer.", "bot"); }
-    };
+   document.getElementById("send-btn").onclick = async () => {
+  const message = document.getElementById("chat-input").value.trim();  // ✅ use "message" variable
+  if (!message) return;
+  append("You", message, "user");
+  document.getElementById("chat-input").value = "";
+  try {
+    const res = await fetch("https://dpp-chatbot-backend.onrender.com/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })  // ✅ correct key and value
+    });
+    const { answer } = await res.json();  // ✅ now reachable
+    append("AI", answer || "No response.", "bot");
+  } catch {
+    append("AI", "Error getting answer.", "bot");
+  }
+};
     document.getElementById("mic-btn").onclick = () => {
       const R = window.SpeechRecognition||window.webkitSpeechRecognition;
       if (!R) return alert("No voice support.");
