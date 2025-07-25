@@ -71,7 +71,8 @@ function attachChatEvents() {
     if (!message) return;
 
     const messages = document.getElementById("chat-messages");
-    messages.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
+    messages.innerHTML += `<div><em>AI is typing...</em></div>`;
+    messages.scrollTop = messages.scrollHeight;
     input.value = "";
 
     try {
@@ -82,8 +83,16 @@ function attachChatEvents() {
       });
 
       const data = await res.json();
-      const reply = data.reply || "🤖 No response from AI.";
-      messages.innerHTML += `<div><strong>AI:</strong> ${reply}</div>`;
+
+if (res.ok && data.reply) {
+  messages.innerHTML += `<div><strong>AI:</strong> ${data.reply}</div>`;
+} else if (data.error) {
+  messages.innerHTML += `<div><strong>AI:</strong> ❌ Error: ${data.error}</div>`;
+  console.error("Backend error:", data.error);
+} else {
+  messages.innerHTML += `<div><strong>AI:</strong> 🤖 Unexpected server response.</div>`;
+  console.error("Unexpected response:", data);
+}
     } catch (err) {
       messages.innerHTML += `<div><strong>AI:</strong> ❌ Error reaching AI service.</div>`;
     }
