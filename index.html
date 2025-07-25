@@ -93,9 +93,10 @@
       document.getElementById("chat-input").value = "";
       try {
         const res = await fetch("https://dpp-chatbot-backend.onrender.com/chat", {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ question: msg, productId: productData.product_id })
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message })  // ✅ not "question"
+});
         });
         const { answer } = await res.json();
         append("AI", answer || "No response.", "bot");
